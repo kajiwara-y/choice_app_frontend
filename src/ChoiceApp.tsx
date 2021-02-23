@@ -1,22 +1,101 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { PokemonChoice } from './PokemonChoice';
 import ChoiceButton from './ChoiceButton'
 
-class ChoiceApp extends React.Component {
+
+type ChoiceAppState ={
+    pokemonChoices:PokemonChoice[];
+  }
+class ChoiceApp extends React.Component<{},ChoiceAppState> {
     render() {
         return(
             <div className="Container">
-            <ChoiceButton pokemonIndex={0}></ChoiceButton>
-            <ChoiceButton pokemonIndex={1}></ChoiceButton>
-            <ChoiceButton pokemonIndex={2}></ChoiceButton>
-            <ChoiceButton pokemonIndex={3}></ChoiceButton>
-            <ChoiceButton pokemonIndex={4}></ChoiceButton>
-            <ChoiceButton pokemonIndex={5}></ChoiceButton>
-            <a className="button Footer" href="#">次の試合へ</a>
+                <ChoiceButton 
+                    pokemonChoice={this.state.pokemonChoices[0]} 
+                    onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
+                <ChoiceButton 
+                    pokemonChoice={this.state.pokemonChoices[1]} 
+                    onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
+                <ChoiceButton 
+                    pokemonChoice={this.state.pokemonChoices[2]} 
+                    onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
+                <ChoiceButton 
+                    pokemonChoice={this.state.pokemonChoices[3]} 
+                    onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
+                <ChoiceButton 
+                    pokemonChoice={this.state.pokemonChoices[4]} 
+                    onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
+                <ChoiceButton 
+                    pokemonChoice={this.state.pokemonChoices[5]} 
+                    onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
+                <a className="button Footer" href="#" onClick={n => this.sendResult()}>次の試合へ</a>
             </div>
         )
+    }
+    constructor(props: {}){
+        super(props);
+        const hash = Math.random().toString(32).substring(2);
+        let pokemonChoices:PokemonChoice[] = new Array();
+        for (let index = 0; index < 6; index++) {
+            const tempPokemonChoice:PokemonChoice = {
+                index:index,
+                hash:hash,
+                dmax:false,
+                choice:false,
+                color: "none"
+            }
+            pokemonChoices.push(tempPokemonChoice)
+        }
+        this.state = {
+            pokemonChoices:pokemonChoices
+        };
+      }
+
+    onPressImg(currentChoice:PokemonChoice){
+        const currentState = this.state.pokemonChoices;
+        const returnChoice = Object.assign({}, currentChoice);
+        if(!currentChoice.choice){
+            returnChoice.choice = true;
+            returnChoice.color = "aqua"
+        }else if(!currentChoice.dmax){
+            returnChoice.dmax = true;
+            returnChoice.color = "pink"
+        }else{
+            returnChoice.choice = false;
+            returnChoice.dmax = false;
+            returnChoice.color = "none"
+        }
+        const pokemonChoices:PokemonChoice[] = new Array();
+        for (let index = 0; index < 6; index++) {
+            if(index == currentChoice.index){
+                pokemonChoices.push(returnChoice)
+            }else{
+                pokemonChoices.push(currentState[index])
+            }
+        }
+        this.setState({
+            pokemonChoices:pokemonChoices
+        });
+    }   
+
+    sendResult(){
+        const hash = Math.random().toString(32).substring(2);
+        let pokemonChoices:PokemonChoice[] = new Array();
+        for (let index = 0; index < 6; index++) {
+            const tempPokemonChoice:PokemonChoice = {
+                index:index,
+                hash:hash,
+                dmax:false,
+                choice:false,
+                color: "none"
+            }
+            pokemonChoices.push(tempPokemonChoice)
+        }
+        this.setState({
+            pokemonChoices:pokemonChoices
+        });
+
     }
 }
 
