@@ -2,11 +2,13 @@ import React from 'react';
 import './App.css';
 import { PokemonChoice } from './PokemonChoice';
 import ChoiceButton from './ChoiceButton'
+import OBSWebSocket from 'obs-websocket-js'
 
 
 type ChoiceAppState ={
     pokemonChoices:PokemonChoice[];
-  }
+}
+const obs = new OBSWebSocket()
 class ChoiceApp extends React.Component<{},ChoiceAppState> {
     render() {
         return(
@@ -50,32 +52,37 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
         this.state = {
             pokemonChoices:pokemonChoices
         };
-      }
+    }
 
     onPressImg(currentChoice:PokemonChoice){
         const currentState = this.state.pokemonChoices;
         const returnChoice = Object.assign({}, currentChoice);
-        if(!currentChoice.choice){
-            returnChoice.choice = true;
-            returnChoice.color = "aqua"
-        }else if(!currentChoice.dmax){
-            returnChoice.dmax = true;
-            returnChoice.color = "pink"
-        }else{
-            returnChoice.choice = false;
-            returnChoice.dmax = false;
-            returnChoice.color = "none"
-        }
-        const pokemonChoices:PokemonChoice[] = new Array();
-        for (let index = 0; index < 6; index++) {
-            if(index == currentChoice.index){
-                pokemonChoices.push(returnChoice)
+        obs.connect({
+        }).then(() => {
+            if(!currentChoice.choice){
+                returnChoice.choice = true;
+                returnChoice.color = "aqua"
+            }else if(!currentChoice.dmax){
+                returnChoice.dmax = true;
+                returnChoice.color = "pink"
             }else{
-                pokemonChoices.push(currentState[index])
+                returnChoice.choice = false;
+                returnChoice.dmax = false;
+                returnChoice.color = "none"
             }
-        }
-        this.setState({
-            pokemonChoices:pokemonChoices
+            const pokemonChoices:PokemonChoice[] = new Array();
+            for (let index = 0; index < 6; index++) {
+                if(index == currentChoice.index){
+                    pokemonChoices.push(returnChoice)
+                }else{
+                    pokemonChoices.push(currentState[index])
+                }
+            }
+            this.setState({
+                pokemonChoices:pokemonChoices
+            });
+            obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_choice_" +  currentChoice.index,"render":returnChoice.choice});
+            obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_dmax_" +  currentChoice.index,"render":returnChoice.dmax});
         });
     }   
 
@@ -95,7 +102,6 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
         this.setState({
             pokemonChoices:pokemonChoices
         });
-
     }
 }
 
