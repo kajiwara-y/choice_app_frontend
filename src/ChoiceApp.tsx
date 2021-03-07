@@ -81,8 +81,8 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
             this.setState({
                 pokemonChoices:pokemonChoices
             });
-            obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_choice_" +  currentChoice.index,"render":returnChoice.choice});
-            obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_dmax_" +  currentChoice.index,"render":returnChoice.dmax});
+            obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_choice_" +  (currentChoice.index + 1),"render":returnChoice.choice});
+            obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_dmax_" +  (currentChoice.index + 1),"render":returnChoice.dmax});
         });
     }   
 
