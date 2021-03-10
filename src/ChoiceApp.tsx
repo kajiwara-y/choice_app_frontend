@@ -3,7 +3,16 @@ import './App.css';
 import { PokemonChoice } from './PokemonChoice';
 import ChoiceButton from './ChoiceButton'
 import OBSWebSocket from 'obs-websocket-js'
-import { useQuery, gql } from '@apollo/client';
+import {
+    gql,
+    ApolloClient,
+    InMemoryCache 
+  } from '@apollo/client';
+  
+  const apolloClient = new ApolloClient({
+    uri: 'http://localhost:3000/graphql',
+    cache: new InMemoryCache()
+  });
 
 type ChoiceAppState ={
     pokemonChoices:PokemonChoice[];
@@ -20,7 +29,7 @@ const obsConectar = ()=>{
     return OBS;
 }
 
-const getPokemonsName = ()=>{
+const getPokemonNames = ()=>{
     const promises = [
         obs.send('GetTextGDIPlusProperties', {"source":"opoPokemonName1"}),
         obs.send('GetTextGDIPlusProperties', {"source":"opoPokemonName2"}),
@@ -31,9 +40,7 @@ const getPokemonsName = ()=>{
     ]
     return Promise.all(promises)
 }
-const saibanQuery = gql`
-    query GetSaiban{saiban{id}}`;
-const getPOkemonsInfo = gql`
+const GET_POKEMON_INFO = gql`
     query getPokemonsInfo(
         $pokemon1Name: String!
         $pokemon2Name: String!
@@ -42,6 +49,7 @@ const getPOkemonsInfo = gql`
         $pokemon5Name: String!
         $pokemon6Name: String!
     ) {
+        battleIndex: saiban{id}
         pokemon1: pokemon(Name: $pokemon1Name) {
             Type1
             Type2
@@ -108,7 +116,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
         return(
             <>
                 <p></p>
-                {this.state.pokemonChoices.length == 6 &&
+                {this.state.pokemonChoices.length > 1 &&
                     <div className="Container">
                         <ChoiceButton 
                             pokemonChoice={this.state.pokemonChoices[0]} 
@@ -141,27 +149,48 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
         this.state = {
             pokemonChoices:pokemonChoices
         }
-        this.initialize();
     }
 
+    componentDidMount(){
+        this.initilize();
+    }
 
-    async initialize(){
-        const pokemonChoices:PokemonChoice[] = new Array();
-        const hash = Math.random().toString(32).substring(2);
-        for (let index = 0; index < 6; index++) {
-            const tempPokemonChoice:PokemonChoice = {
-                index:index,
-                name: "",
-                hash:hash,
-                dmax:false,
-                choice:false,
-                color: "none"
+    async initilize(){
+        let onlyPokemonNames:  string[] = []
+        obsConectar().then(() => { return getPokemonNames()})
+        .then((pokemonNames) =>{
+            onlyPokemonNames = pokemonNames.map(pokemonName => pokemonName.text)
+            return apolloClient.query({ query: GET_POKEMON_INFO, 
+                variables: {
+                    pokemon1Name: onlyPokemonNames[0],
+                    pokemon2Name: onlyPokemonNames[1],
+                    pokemon3Name: onlyPokemonNames[2],
+                    pokemon4Name: onlyPokemonNames[3],
+                    pokemon5Name: onlyPokemonNames[4],
+                    pokemon6Name: onlyPokemonNames[5],
+                },
+            })})
+        .then((pokemonStatusResult) => {
+            console.log(pokemonStatusResult)
+            const pokemonChoices:PokemonChoice[] = new Array();
+            const hash = Math.random().toString(32).substring(2);
+            for (let index = 0; index < 6; index++) {
+                const tempPokemonChoice:PokemonChoice = {
+                    index:index,
+                    name: onlyPokemonNames[index],
+                    hash:hash,
+                    dmax:false,
+                    choice:false,
+                    color: "none"
+                }
+                pokemonChoices.push(tempPokemonChoice)
             }
-            pokemonChoices.push(tempPokemonChoice)
-        }
-        this.state = {
-            pokemonChoices:pokemonChoices
-        };
+            this.setState({
+                pokemonChoices:pokemonChoices
+            });
+        }).catch((error) =>{
+            console.error(error)
+        });
     }
 
     onPressImg(currentChoice:PokemonChoice){
