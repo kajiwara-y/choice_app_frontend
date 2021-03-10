@@ -51,6 +51,8 @@ const GET_POKEMON_INFO = gql`
     ) {
         battleIndex: saiban{id}
         pokemon1: pokemon(Name: $pokemon1Name) {
+            NickName
+            No
             Type1
             Type2
             HP
@@ -61,6 +63,8 @@ const GET_POKEMON_INFO = gql`
             Speed
         }
         pokemon2: pokemon(Name: $pokemon2Name) {
+            NickName
+            No
             Type1
             Type2
             HP
@@ -71,6 +75,8 @@ const GET_POKEMON_INFO = gql`
             Speed
         }
         pokemon3: pokemon(Name: $pokemon3Name) {
+            NickName
+            No
             Type1
             Type2
             HP
@@ -81,6 +87,8 @@ const GET_POKEMON_INFO = gql`
             Speed
         }
         pokemon4: pokemon(Name: $pokemon4Name) {
+            NickName
+            No
             Type1
             Type2
             HP
@@ -91,6 +99,8 @@ const GET_POKEMON_INFO = gql`
             Speed
         }
         pokemon5: pokemon(Name: $pokemon5Name) {
+            NickName
+            No
             Type1
             Type2
             HP
@@ -101,6 +111,8 @@ const GET_POKEMON_INFO = gql`
             Speed
         }
         pokemon6: pokemon(Name: $pokemon6Name) {
+            NickName
+            No
             Type1
             Type2
             HP
@@ -177,11 +189,19 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
             for (let index = 0; index < 6; index++) {
                 const tempPokemonChoice:PokemonChoice = {
                     index:index,
-                    name: onlyPokemonNames[index],
+                    name:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].NickName: "",
                     hash:hash,
                     dmax:false,
                     choice:false,
-                    color: "none"
+                    color: "none",
+                    type1:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].Type1: "",
+                    type2:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].Type2: "",
+                    hp:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].HP: "",
+                    attack:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].Attack: "",
+                    defence:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].Defence: "",
+                    specialattack:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].SpecialAttack: "",
+                    specialdefence:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].SpecialDefence: "",
+                    speed:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].Speed: "",
                 }
                 pokemonChoices.push(tempPokemonChoice)
             }
@@ -225,24 +245,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
     }   
 
     sendResult(){
-        const hash = Math.random().toString(32).substring(2);
-        let pokemonChoices:PokemonChoice[] = new Array();
-        for (let index = 0; index < 6; index++) {
-            const tempPokemonChoice:PokemonChoice = {
-                name: "aaa",
-                index:index,
-                hash:hash,
-                dmax:false,
-                choice:false,
-                color: "none"
-            }
-            obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_choice_" +  (tempPokemonChoice.index + 1),"render":tempPokemonChoice.choice});
-            obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_dmax_" +  (tempPokemonChoice.index + 1),"render":tempPokemonChoice.dmax});
-            pokemonChoices.push(tempPokemonChoice)
-        }
-        this.setState({
-            pokemonChoices:pokemonChoices
-        });
+        this.initilize()
     }
 }
 
