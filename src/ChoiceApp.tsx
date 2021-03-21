@@ -131,6 +131,26 @@ const GET_POKEMON_INFO = gql`
             Speed
         }
     }`;
+const PUT_OPO_CHOICE = gql`
+    mutation setOpoChoice(
+            $battle_id: Int!
+            $opo_choice1: String!
+            $opo_choice2: String!
+            $opo_choice3: String!
+            $opo_choice4: String!
+            $opo_dmax: String!
+        ) {opoChoice(data:
+            {
+                battle_id:$battle_id 
+                opo_choice1:$opo_choice1
+                opo_choice2:$opo_choice2 
+                opo_choice3:$opo_choice3 
+                opo_choice4:$opo_choice4 
+                opo_dmax:$opo_dmax
+            }) {
+        battle_id
+        }
+    }`;
 class ChoiceApp extends React.Component<{},ChoiceAppState> {
     render() {
         return(
