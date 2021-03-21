@@ -242,6 +242,8 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                     speed:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].Speed: "",
                 }
                 pokemonChoices.push(tempPokemonChoice)
+                obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_choice_" +  (index + 1),"render":false});
+                obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_dmax_" +  (index + 1),"render":false});
             }
             this.setState({
                 battleId: pokemonStatusResult.data["battleIndex"].id,
