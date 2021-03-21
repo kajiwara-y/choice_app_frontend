@@ -16,19 +16,24 @@ const apolloClient = new ApolloClient({
 });
 
 type ChoiceAppState ={
+    battleId:string;
     pokemonChoices:PokemonChoice[];
 }
-const obs = new OBSWebSocket()
-const obsConectar = ()=>{
-    const OBS = obs.connect({
-        address: 'localhost:4444',
-        password: 'yutaka1119'
-    }).then(()=>{
-        console.log('-> Estas conectado a OBS Studio <-');  
-    })
 
-    return OBS;
+type WebsocketInformation ={
+    address:string;
+    password:string;
 }
+const obs = new OBSWebSocket()
+const obsConectar = async (websocketInfo:WebsocketInformation): Promise<void> =>{
+    try{
+        await obs.connect({ address: websocketInfo.address, password: websocketInfo.password });
+    } catch(error){
+        console.error(error)
+        throw error
+    }
+}
+
 
 const getPokemonNames = ()=>{
     const promises = [
