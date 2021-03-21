@@ -152,6 +152,7 @@ const PUT_OPO_CHOICE = gql`
         }
     }`;
 class ChoiceApp extends React.Component<{},ChoiceAppState> {
+    private websocketInfo :WebsocketInformation = {address : "", password:""}
     render() {
         return(
             <>
@@ -192,12 +193,20 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
     }
 
     componentDidMount(){
-        this.initilize();
+        fetch("http://" + hostname + ':3000/websocketConnectInfo')
+        .then(response => response.json())
+        .then(data => {
+            this.websocketInfo.address = data.websocketAddress
+            this.websocketInfo.password = data.websocketPassword
+            obsConectar(this.websocketInfo).then(() => {
+                this.initilize();
+            });
+        });
     }
 
     async initilize(){
         let onlyPokemonNames:  string[] = []
-        obsConectar().then(() => { return getPokemonNames()})
+        obsConectar(this.websocketInfo).then(() => { return getPokemonNames()})
         .then((pokemonNames) =>{
             onlyPokemonNames = pokemonNames.map(pokemonName => pokemonName.text)
             return apolloClient.query({ query: GET_POKEMON_INFO, 
@@ -244,7 +253,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
     onPressImg(currentChoice:PokemonChoice){
         const currentState = this.state.pokemonChoices;
         const returnChoice = Object.assign({}, currentChoice);
-        obsConectar().then(() => {
+        obsConectar(this.websocketInfo).then(() => {
             if(!currentChoice.choice){
                 returnChoice.choice = true;
                 returnChoice.color = "aqua"
