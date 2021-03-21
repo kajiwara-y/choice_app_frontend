@@ -188,6 +188,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
         console.log('constructor')
         const pokemonChoices:PokemonChoice[] = [];
         this.state = {
+            battleId: "",
             pokemonChoices:pokemonChoices
         }
     }
@@ -243,6 +244,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                 pokemonChoices.push(tempPokemonChoice)
             }
             this.setState({
+                battleId: pokemonStatusResult.data["battleIndex"].id,
                 pokemonChoices:pokemonChoices
             });
         }).catch((error) =>{
@@ -251,6 +253,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
     }
 
     onPressImg(currentChoice:PokemonChoice){
+        const battleId = this.state.battleId
         const currentState = this.state.pokemonChoices;
         const returnChoice = Object.assign({}, currentChoice);
         obsConectar(this.websocketInfo).then(() => {
@@ -274,6 +277,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                 }
             }
             this.setState({
+                battleId:battleId,
                 pokemonChoices:pokemonChoices
             });
             obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_choice_" +  (currentChoice.index + 1),"render":returnChoice.choice});
