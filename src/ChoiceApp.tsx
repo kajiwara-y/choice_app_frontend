@@ -9,10 +9,11 @@ import {
     InMemoryCache 
   } from '@apollo/client';
   
-  const apolloClient = new ApolloClient({
-    uri: 'http://localhost:3000/graphql',
-    cache: new InMemoryCache()
-  });
+const hostname = window.location.hostname
+const apolloClient = new ApolloClient({
+  uri: 'http://' + hostname + ':3000/graphql',
+  cache: new InMemoryCache()
+});
 
 type ChoiceAppState ={
     pokemonChoices:PokemonChoice[];
