@@ -1,6 +1,7 @@
 export type PokemonChoice = {
     index: number;
     name: string;
+    no: string;
     choice: boolean;
     dmax: boolean;
     hash: string;
