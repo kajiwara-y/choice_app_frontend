@@ -289,7 +289,26 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
     }   
 
     sendResult(){
-        this.initilize()
+        const battleId = this.state.battleId
+        const currentChoices = this.state.pokemonChoices;
+        const choicePokemon = currentChoices.filter(choice => choice.choice).map(choice => choice.no)
+        const dmaxPokemon = currentChoices.filter(choice => choice.dmax).map(choice => choice.no)
+        const choiceResult = {
+            battle_id: battleId,
+            opo_choice1: choicePokemon[0] ? choicePokemon[0]:"",
+            opo_choice2: choicePokemon[1] ? choicePokemon[1]:"",
+            opo_choice3: choicePokemon[2] ? choicePokemon[2]:"",
+            opo_choice4: choicePokemon[3] ? choicePokemon[3]:"",
+            opo_dmax: dmaxPokemon[0] ? dmaxPokemon[0]:"",
+        }
+        console.log("choiceResult is" + JSON.stringify(choiceResult))
+        apolloClient.mutate({ mutation: PUT_OPO_CHOICE, 
+            variables: choiceResult,
+        }).then(()=> {
+            this.initilize()
+        }).catch((error) =>{
+            console.error(error)
+        });
     }
 }
 
