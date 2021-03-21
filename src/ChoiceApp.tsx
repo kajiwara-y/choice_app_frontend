@@ -46,6 +46,8 @@ const getPokemonNames = ()=>{
     ]
     return Promise.all(promises)
 }
+
+
 const GET_POKEMON_INFO = gql`
     query getPokemonsInfo(
         $pokemon1Name: String!
@@ -154,7 +156,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                         <ChoiceButton 
                             pokemonChoice={this.state.pokemonChoices[5]} 
                             onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
-                        <a className="button Footer" href="#" onClick={n => this.sendResult()}>次の試合へ</a>
+                        <a className="button Footer" href="!#" onClick={n => this.sendResult()}>次の試合へ</a>
                     </div>
                 }       
             </>
@@ -163,7 +165,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
     constructor(props: {}){
         super(props);
         console.log('constructor')
-        const pokemonChoices:PokemonChoice[] = new Array();
+        const pokemonChoices:PokemonChoice[] = [];
         this.state = {
             pokemonChoices:pokemonChoices
         }
@@ -190,7 +192,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
             })})
         .then((pokemonStatusResult) => {
             console.log(pokemonStatusResult)
-            const pokemonChoices:PokemonChoice[] = new Array();
+            const pokemonChoices:PokemonChoice[] = [];
             const hash = Math.random().toString(32).substring(2);
             for (let index = 0; index < 6; index++) {
                 const tempPokemonChoice:PokemonChoice = {
@@ -234,9 +236,9 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                 returnChoice.dmax = false;
                 returnChoice.color = "none"
             }
-            const pokemonChoices:PokemonChoice[] = new Array();
+            const pokemonChoices:PokemonChoice[] = [];
             for (let index = 0; index < 6; index++) {
-                if(index == currentChoice.index){
+                if(index === currentChoice.index){
                     pokemonChoices.push(returnChoice)
                 }else{
                     pokemonChoices.push(currentState[index])
