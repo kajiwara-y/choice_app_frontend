@@ -228,6 +228,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                 const tempPokemonChoice:PokemonChoice = {
                     index:index,
                     name:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].NickName: "",
+                    no:pokemonStatusResult.data["pokemon" + (index + 1)]? pokemonStatusResult.data["pokemon" + (index + 1)].No: "",
                     hash:hash,
                     dmax:false,
                     choice:false,
