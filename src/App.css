@@ -9,6 +9,12 @@
   grid-column-end: 3;
 }
 
+@media screen and (max-width: 768px) {
+  .pokemon-img{
+    width: 160px;
+    height: 160px;
+  }
+}
 .button {
   display: inline-block;
   height: 54px;

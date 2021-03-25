@@ -19,7 +19,7 @@ class ChoiceButton extends React.Component<ChoiceButtonProps> {
     const imgPath = `http://${hostname}:3000/pokemon/${this.props.pokemonChoice.no}.png?${this.props.pokemonChoice.hash}`;
     return (
       <div style={backgroundStyle}>
-        <input type="image" src={imgPath} alt="送信する"  onClick={n => this.onPressImg(this.props.pokemonChoice)}/>
+        <input type="image" className="pokemon-img" src={imgPath} alt="送信する"  onClick={n => this.onPressImg(this.props.pokemonChoice)}/>
         <div className="pokemonInformation">
           {this.props.pokemonChoice.name &&
           <table>
