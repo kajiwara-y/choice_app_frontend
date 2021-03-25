@@ -159,6 +159,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                 <p></p>
                 {this.state.pokemonChoices.length > 1 &&
                     <div className="Container">
+                        <p className="header">{this.state.battleId}</p>
                         <ChoiceButton 
                             pokemonChoice={this.state.pokemonChoices[0]} 
                             onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
