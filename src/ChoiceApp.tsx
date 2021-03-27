@@ -193,6 +193,13 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
             battleId: "",
             pokemonChoices:pokemonChoices
         }
+        obs.on('SceneItemTransformChanged', data => {
+            console.log("SceneItemTransformChanged");
+            console.log(data)
+            if(data['item-name'] === "my2pokemon1.png"){
+                this.sendResult();
+            }
+        })
     }
 
     componentDidMount(){
