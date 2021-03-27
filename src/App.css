@@ -9,6 +9,11 @@
   grid-column-end: 3;
 }
 
+.header{
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
 @media screen and (max-width: 768px) {
   .pokemon-img{
     width: 160px;
