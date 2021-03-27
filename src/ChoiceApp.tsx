@@ -178,7 +178,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                         <ChoiceButton 
                             pokemonChoice={this.state.pokemonChoices[5]} 
                             onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
-                        <a className="button Footer" href="!#" onClick={n => this.sendResult()}>次の試合へ</a>
+                        <a className="button Footer danger" href="!#" onClick={n => this.initilize(true)}>強制更新</a>
                     </div>
                 }       
             </>
@@ -206,7 +206,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
         });
     }
 
-    async initilize(){
+    async initilize(backBattleId: boolean = false){
         let onlyPokemonNames:  string[] = []
         obsConectar(this.websocketInfo).then(() => { return getPokemonNames()})
         .then((pokemonNames) =>{
@@ -225,6 +225,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
             console.log(pokemonStatusResult)
             const pokemonChoices:PokemonChoice[] = [];
             const hash = Math.random().toString(32).substring(2);
+            const battleId = !backBattleId ? pokemonStatusResult.data["battleIndex"].id : pokemonStatusResult.data["battleIndex"].id - 1;
             for (let index = 0; index < 6; index++) {
                 const tempPokemonChoice:PokemonChoice = {
                     index:index,
@@ -248,7 +249,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                 obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_dmax_" +  (index + 1),"render":false});
             }
             this.setState({
-                battleId: pokemonStatusResult.data["battleIndex"].id,
+                battleId: battleId,
                 pokemonChoices:pokemonChoices
             });
         }).catch((error) =>{
