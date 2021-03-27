@@ -179,6 +179,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                             pokemonChoice={this.state.pokemonChoices[5]} 
                             onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
                         <a className="button Footer danger" href="!#" onClick={n => this.initilize(true)}>強制更新</a>
+                        <a className="button Footer" href="!#" onClick={n => this.sendResult()}>手動登録</a>
                     </div>
                 }       
             </>
