@@ -311,14 +311,18 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
             opo_choice4: choicePokemon[3] ? choicePokemon[3]:"",
             opo_dmax: dmaxPokemon[0] ? dmaxPokemon[0]:"",
         }
-        console.log("choiceResult is" + JSON.stringify(choiceResult))
-        apolloClient.mutate({ mutation: PUT_OPO_CHOICE, 
-            variables: choiceResult,
-        }).then(()=> {
-            this.initilize()
-        }).catch((error) =>{
-            console.error(error)
-        });
+        if(choicePokemon.length === 0){
+            console.log("no set choice pokemon and not send choice result.")
+        }else{
+            console.log("choiceResult is" + JSON.stringify(choiceResult))
+            apolloClient.mutate({ mutation: PUT_OPO_CHOICE, 
+                variables: choiceResult,
+            }).then(()=> {
+                this.initilize()
+            }).catch((error) =>{
+                console.error(error)
+            });
+        }
     }
 }
 
