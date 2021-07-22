@@ -1,15 +1,22 @@
 import React from 'react';
+import { HashRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import ReactDOM from 'react-dom';
 import './index.css';
 import ChoiceApp from './ChoiceApp';
+import Result from './result';
 import reportWebVitals from './reportWebVitals';
 
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ChoiceApp />
-  </React.StrictMode>,
+  <Router>
+  <div>
+    <Switch>
+      <Route exact path="/" component={ChoiceApp} />
+      <Route exact path="/result" component={Result} />
+    </Switch>
+  </div>
+</Router>,
   document.getElementById('root')
 );
 
