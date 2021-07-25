@@ -3,6 +3,16 @@
   grid-template-rows: auto auto auto 40;
   grid-template-columns: auto auto;
 }
+.choice-style{
+  border-style: solid;
+  border-color: white;
+}
+.choice{
+  border-color: aqua;
+}
+.choice-dmax{
+  border-color: pink !important;
+}
 
 .Footer{
   grid-column-start: 1;
