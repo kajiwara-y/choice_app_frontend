@@ -46,11 +46,23 @@ const Result: React.VFC<Props> = () => {
     const regex = /^0+/i;
     let tempPokemonNum = pokemonNum.replace(regex, '').toLowerCase();
     switch(tempPokemonNum){
+      case "80a": // ヤドランガラルの姿
+        tempPokemonNum = "80g"
+        break;
+      case "479water": // ウォッシュロトム
+        tempPokemonNum = "479w"
+        break;
+      case "618a": // マッギョガラルの姿
+        tempPokemonNum = "618g"
+        break;
       case "745a": // ルガルガンまよなかの姿
         tempPokemonNum = "745f"
         break;
       case "745b": // ルガルガンたそがれの姿
         tempPokemonNum = "745d"
+        break;
+      case "800a": // 日食ネクロズマ
+        tempPokemonNum = "800s"
         break;
       case "876a": // イエッサン（メス）
         tempPokemonNum = "876f"
@@ -85,16 +97,49 @@ const Result: React.VFC<Props> = () => {
   }
   const resultDom = (resultID: number | null) =>{
     let resultMessage = "unknown"
+    let resultStyle = {}
     switch(resultID){
       case 1:
         resultMessage = "Win"
+        resultStyle = {
+          color: "red"
+        }
       break;
       case 0:
         resultMessage = "Lose"
+        resultStyle = {
+          color: "blue"
+        }
       break;
     }
     return(
-      <p>{resultMessage}</p>
+      <p style={resultStyle}>{resultMessage}</p>
+    )
+  }
+  const createOpoDOM = (row:BattleResult) =>{
+    return(
+      <div>
+        {opoPokemonDom(row, row.opo_pokemon1)}
+        {opoPokemonDom(row, row.opo_pokemon2)}
+        {opoPokemonDom(row, row.opo_pokemon3)}
+        {opoPokemonDom(row, row.opo_pokemon4)}
+        {opoPokemonDom(row, row.opo_pokemon5)}
+        {opoPokemonDom(row, row.opo_pokemon6)}
+      </div>
+    )
+  }
+  const opoPokemonDom = (row:BattleResult, opo_pokemon_id:string) =>{
+    return(
+      <i className={`
+                    icon32_sp
+                    choice-style
+                    n${ convertPokkemonNum(opo_pokemon_id)}
+                    ${ opo_pokemon_id === row.opo_choice1 ? 'choice' : ''}
+                    ${ opo_pokemon_id === row.opo_choice2 ? 'choice' : ''}
+                    ${ opo_pokemon_id === row.opo_choice3 ? 'choice' : ''}
+                    ${ opo_pokemon_id === row.opo_choice4 ? 'choice' : ''}
+                    ${ opo_pokemon_id === row.opo_dmax ? 'choice-dmax' : ''}
+                `}></i>
     )
   }
   return (
@@ -114,8 +159,8 @@ const Result: React.VFC<Props> = () => {
               <tr key={row.battle_id}>
                <td>{row["battle_time"]}</td>
                <td className="webp">{createChoiceDOM(row)}</td>
-               <td>{resultDom(row.result)}</td>
-               <td></td> 
+               <td className="result">{resultDom(row.result)}</td>
+               <td className="webp">{createOpoDOM(row)}</td> 
               </tr>
             ))
           }

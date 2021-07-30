@@ -70,3 +70,7 @@ img {
   display: inline-block;
   vertical-align: top;
 }
+.result{
+  text-align: center;
+  font-weight: bold;
+}
