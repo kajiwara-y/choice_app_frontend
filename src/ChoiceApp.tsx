@@ -159,7 +159,6 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
                 <p></p>
                 {this.state.pokemonChoices.length > 1 &&
                     <div className="Container">
-                        <p className="header">{this.state.battleId}</p>
                         <ChoiceButton 
                             pokemonChoice={this.state.pokemonChoices[0]} 
                             onPressImg={(currentChoice) => this.onPressImg(currentChoice)} ></ChoiceButton>
@@ -216,7 +215,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
 
     async initilize(backBattleId: boolean = false){
         let onlyPokemonNames:  string[] = []
-        obsConectar(this.websocketInfo).then(() => { return getPokemonNames()})
+        getPokemonNames()
         .then((pokemonNames) =>{
             onlyPokemonNames = pokemonNames.map(pokemonName => pokemonName.text)
             return apolloClient.query({ query: GET_POKEMON_INFO, 
