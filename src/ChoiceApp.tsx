@@ -192,11 +192,12 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
             battleId: "",
             pokemonChoices:pokemonChoices
         }
+        const reloadTarget = ["my2pokemon1.png","my2pokemon2.png","my2pokemon3.png","my2pokemon4.png","pokemon1.png","pokemon2.png","pokemon3.png","pokemon4.png","pokemon5.png","pokemon6.png"]
         obs.on('SceneItemTransformChanged', data => {
             console.log("SceneItemTransformChanged");
             console.log(data)
-            if(data['item-name'] === "my2pokemon1.png"){
-                this.sendResult();
+            if(reloadTarget.includes(data['item-name'])){
+                this.initilize();
             }
         })
     }
@@ -294,6 +295,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
             });
             obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_choice_" +  (currentChoice.index + 1),"render":returnChoice.choice});
             obs.send('SetSceneItemRender', {"scene-name":"choice","source":"background_color_dmax_" +  (currentChoice.index + 1),"render":returnChoice.dmax});
+            this.sendResult()
         });
     }   
 
@@ -317,7 +319,7 @@ class ChoiceApp extends React.Component<{},ChoiceAppState> {
             apolloClient.mutate({ mutation: PUT_OPO_CHOICE, 
                 variables: choiceResult,
             }).then(()=> {
-                this.initilize()
+                //this.initilize()
             }).catch((error) =>{
                 console.error(error)
             });
