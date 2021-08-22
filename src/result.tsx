@@ -79,6 +79,18 @@ const Result: React.VFC<Props> = () => {
       case "147a": // サンダーガラルの姿
         tempPokemonNum = "147g"
         break;
+      case "555a": // ヒヒダルマガラルの姿
+        tempPokemonNum = "555g"
+        break;
+      case "423a": //トリトドン
+        tempPokemonNum = "423"
+        break;
+      case "222a": //サニーゴガラルの姿
+        tempPokemonNum = "222g"
+        break;
+      case "199a": //ヤドキングガラルの姿
+        tempPokemonNum = "199g"
+        break;
     }
     return tempPokemonNum
   }
